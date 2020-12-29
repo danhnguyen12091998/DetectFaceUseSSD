@@ -44,6 +44,18 @@ MODEL_SPECS = {
         'max_size': 0.95,
         'input_order': [0, 2, 1],  # order of loc_data, conf_data, priorbox_data
     },
+    'ssd_mobilenet_v1_face': {
+        'input_pb':   os.path.abspath(os.path.join(
+                          DIR_NAME, 'ssd_mobilenet_v1_face.pb')),
+        'tmp_uff':    os.path.abspath(os.path.join(
+                          DIR_NAME, 'tmp_v1_face.uff')),
+        'output_bin': os.path.abspath(os.path.join(
+                          DIR_NAME, 'TRT_ssd_mobilenet_v1_face.bin')),
+        'num_classes': 2,
+        'min_size': 0.2,
+        'max_size': 0.95,
+        'input_order': [0, 2, 1],  # order of loc_data, conf_data, priorbox_data
+    },
     'ssd_mobilenet_v2_coco': {
         'input_pb':   os.path.abspath(os.path.join(
                           DIR_NAME, 'ssd_mobilenet_v2_coco.pb')),
