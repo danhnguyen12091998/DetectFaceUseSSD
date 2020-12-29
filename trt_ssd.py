@@ -26,6 +26,7 @@ SUPPORTED_MODELS = [
     'ssd_mobilenet_v1_egohands',
     'ssd_mobilenet_v2_coco',
     'ssd_mobilenet_v2_egohands',
+    'ssd_mobilenet_v1_face'
 ]
 
 
