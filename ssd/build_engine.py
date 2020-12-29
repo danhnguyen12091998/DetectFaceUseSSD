@@ -182,7 +182,7 @@ def add_plugin(graph, model, spec):
     graph.collapse_namespaces(namespace_plugin_map)
     graph.remove(graph.graph_outputs, remove_exclusive_dependencies=False)
     graph.find_nodes_by_op("NMS_TRT")[0].input.remove("Input")
-    if model == 'ssd_mobilenet_v1_coco' or model == 'ssd_mobilenet_v1_face':
+    if model == 'ssd_mobilenet_v1_coco':
         graph.find_nodes_by_name("Input")[0].input.remove("image_tensor:0")
 
     return graph
