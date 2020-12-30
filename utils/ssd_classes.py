@@ -103,6 +103,11 @@ EGOHANDS_CLASSES_LIST = [
     'hand',
 ]
 
+FACE_CLASSES_LIST = [
+    'background',
+    'face',
+]
+
 
 def get_cls_dict(model):
     """Get the class ID to name translation dictionary."""
@@ -110,6 +115,8 @@ def get_cls_dict(model):
         cls_list = COCO_CLASSES_LIST
     elif model == 'egohands':
         cls_list = EGOHANDS_CLASSES_LIST
+    elif model == 'face':
+        cls_list = FACE_CLASSES_LIST
     else:
         raise ValueError('Bad model name')
     return {i: n for i, n in enumerate(cls_list)}
