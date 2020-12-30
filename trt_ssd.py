@@ -103,7 +103,7 @@ def lip_distance(shape):
 # define two constants, one for the eye aspect ratio to indicate
 # blink and then a second constant for the number of consecutive
 # frames the eye must be below the threshold
-EYE_AR_THRESH = 0.2
+EYE_AR_THRESH = 0.15
 EYE_AR_CONSEC_FRAMES = 5
 YAWN_THRESH = 30
 
@@ -334,6 +334,8 @@ def loop_and_detect(cam, trt_ssd, conf_th, vis):
     fps = 0.0
     IS_YAWN = False
     yawnPerMinute = 0
+    number_of_frame = 0
+    ear_list = []
     tic = time.time()
     while True:
         if cv2.getWindowProperty(WINDOW_NAME, 0) < 0:
@@ -357,7 +359,6 @@ def loop_and_detect(cam, trt_ssd, conf_th, vis):
 
                 # average the eye aspect ratio together for both eyes
                 ear = (leftEAR + rightEAR) / 2.0
-                print("ear: ", ear)
                 distance = lip_distance(shape)
                 # print("distance ", distance)
 
@@ -394,6 +395,22 @@ def loop_and_detect(cam, trt_ssd, conf_th, vis):
                         print("YAWNNNNNNNN !")
                         IS_YAWN = False
 
+            number_of_frame +=1    
+            
+            # Get number of blinks per second
+            if number_of_frame == 1800:
+                value_blink_persecond = get_value_blink_persecond(ear_list)
+                result_blink_SVM.append(value_blink_persecond)
+                print("Blinks per min: ", value_blink_persecond)
+                print("Yawns per min:", yawnPerMinute)
+                print("blinks list:", result_blink_SVM)
+                if len(result_blink_SVM) < 2:
+                    print("Started")
+                else:
+                    get_the_status(result_blink_SVM, yawnPerMinute)
+                    number_of_frame = 0
+                    ear_list = []
+                    yawnPerMinute = 0    
 
             img = vis.draw_bboxes(img, boxes, confs, clss)
             img = show_fps(img, fps)
@@ -425,8 +442,6 @@ def main():
     open_window(WINDOW_NAME, args.image_width, args.image_height,
                 'Camera TensorRT SSD Demo for Jetson Nano')
     vis = BBoxVisualization(cls_dict)
-    COUNTER = 0
-    IS_YAWN = False
     loop_and_detect(cam, trt_ssd, conf_th=0.3, vis=vis)
 
     cam.stop()
